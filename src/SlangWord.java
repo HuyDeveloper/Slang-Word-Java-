@@ -4,13 +4,14 @@ import java.io.*;
 public class SlangWord {
     private Map<String, List<String>> dictionaryWords;
     public Scanner sc = new Scanner(System.in);
-
+    private Map<String, List<String>> cloneDict = new HashMap<>();
 
     SlangWord() {
         dictionaryWords = new HashMap<>();
     }
 
     SlangWord(String fileName) throws IOException {
+        dictionaryWords = new HashMap<>();
         BufferedReader br = null;
         try {
             br = new BufferedReader(new FileReader(fileName));
@@ -24,17 +25,22 @@ public class SlangWord {
                 break;
             }
             String[] info = line.split("`", 2);
+            String key = info[0];
             List<String> values = new ArrayList<>();
-            String[] tempValue = info[1].split("|");
-            for(int i = 0; i < tempValue.length;i++){
-                values.add(tempValue[i]);
+            if(info.length >= 2) {
+                //Thiếu trường hợp 2 value cách nhau bằng enter(AMA)
+                String[] tempValue = info[1].split("|");
+                for (int i = 0; i < tempValue.length; i++) {
+                    values.add(tempValue[i]);
+                }
             }
-            dictionaryWords.put(info[0], values);
+            dictionaryWords.put(key, values);
         }
+        cloneDict.putAll(dictionaryWords);
         br.close();
     }
 
-    public void saveToHistoryFile(String word) throws  IOException{
+    public void saveToHistoryFile(String word) {
         FileWriter fw;
         try {
             fw = new FileWriter("historyFile.txt");
@@ -43,17 +49,22 @@ public class SlangWord {
             System.out.println("Error opening file");
             return ;
         }
-        fw.write(word);
-        fw.close();
+        try {
+            fw.write(word);
+            fw.close();
+        }
+        catch (IOException exc){
+
+        }
     }
     public List<String> findBySlangWord(String word){
-        //saveToHistoryFile(word);
+        saveToHistoryFile(word);
         List<String> values = dictionaryWords.get(word);
         return values;
     }
 
     public boolean findByDefinition(String definition){
-        //saveToHistoryFile(definition);
+        saveToHistoryFile(definition);
         boolean flag = false;
         for(Map.Entry<String, List<String>> entry : dictionaryWords.entrySet()){
             List<String> values = entry.getValue();
@@ -81,7 +92,7 @@ public class SlangWord {
         br.close();
     }
 
-    public void save(String filename) throws IOException {
+    public void save(String filename){
         FileWriter fw = null;
         try {
             fw = new FileWriter(filename);
@@ -113,6 +124,7 @@ public class SlangWord {
             if(choice == 1){
                 dictionaryWords.replace(key, values);
                 System.out.println("Slang word is overwrite");
+                save("slang.txt");
             }
             else if (choice == 2){
                 dictionaryWords.put(key, values);
@@ -124,4 +136,62 @@ public class SlangWord {
             System.out.println("Slang word is added");
         }
     }
+    public void editSlangWord(String key){
+        int n;
+        List<String> values = null;
+        if(dictionaryWords.containsKey(key)) {
+            System.out.println("Enter number value you want to change: ");
+            n = sc.nextInt();
+            for(int i = 0; i < n; i++){
+                String str = sc.next();
+                values.add(str);
+            }
+            dictionaryWords.replace(key, values);
+            System.out.println("This slang word is edited");
+        }
+        else{
+            System.out.println("This key is not existed");
+        }
+    }
+
+    public void deleteSlangWord(String key){
+        if (dictionaryWords.containsKey(key)){
+            while(true) {
+                int choice = sc.nextInt();
+                System.out.println("Do you want to delete this slang word");
+                System.out.println("1. YES");
+                System.out.println("2. NO");
+                System.out.println("Enter your choice");
+                if (choice == 1) {
+                    dictionaryWords.remove(key);
+                    System.out.println("This slang word is deleted");
+                    break;
+                } else if (choice == 2) {
+                    System.out.println("Nothing happened");
+                    break;
+                }
+                else{
+                    System.out.println("Your choice is not existed");
+                }
+            }
+        }
+        else{
+            System.out.println("This key is not existed");
+        }
+    }
+
+    public void resetListSlangWord(){
+        dictionaryWords.putAll(cloneDict);
+        System.out.println("This list slang word is reset");
+    }
+
+    public void randomSlangWord(){
+        double randomDouble = Math.random();
+        randomDouble = randomDouble * dictionaryWords.size() + 1;
+        int index = (int) randomDouble;
+        String[] keys = dictionaryWords.keySet().toArray(new String[0]);
+        System.out.println(keys[index]);
+    }
+
+
 }
