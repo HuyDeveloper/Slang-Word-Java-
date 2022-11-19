@@ -29,10 +29,11 @@ public class SlangWord {
             List<String> values = new ArrayList<>();
             if(info.length >= 2) {
                 //Thiếu trường hợp 2 value cách nhau bằng enter(AMA)
-                String[] tempValue = info[1].split("|");
-                for (int i = 0; i < tempValue.length; i++) {
-                    values.add(tempValue[i]);
+                String[] tempValue = info[1].split("\\| ");
+                for (String temp : tempValue) {
+                    values.add(temp);
                 }
+
             }
             dictionaryWords.put(key, values);
         }
@@ -41,26 +42,33 @@ public class SlangWord {
     }
 
     public void saveToHistoryFile(String word) {
-        FileWriter fw;
+        DataOutputStream dos;
         try {
-            fw = new FileWriter("historyFile.txt");
+            dos = new DataOutputStream(new FileOutputStream("historyFile.txt", true));
         }
-        catch (IOException exc){
-            System.out.println("Error opening file");
-            return ;
+        catch(IOException exc)
+        {
+            System.out.println("Error open file !");
+            return;
         }
-        try {
-            fw.write(word);
-            fw.close();
-        }
-        catch (IOException exc){
 
+        try {
+            dos.writeUTF(word);
+            dos.close();
+        }
+        catch(IOException exc)
+        {
+            System.out.println("Error write file.");
         }
     }
-    public List<String> findBySlangWord(String word){
+    public boolean findBySlangWord(String word){
         saveToHistoryFile(word);
-        List<String> values = dictionaryWords.get(word);
-        return values;
+        if(dictionaryWords.containsKey(word)){
+            List<String> values = dictionaryWords.get(word);
+            System.out.println(values);
+            return true;
+        }
+        return false;
     }
 
     public boolean findByDefinition(String definition){
@@ -70,7 +78,7 @@ public class SlangWord {
             List<String> values = entry.getValue();
             for(String s : values){
                 if (s.equals(definition)){
-                    System.out.print(entry.getKey());
+                    System.out.println(entry.getKey());
                     flag = true;
                     break;
                 }
@@ -80,16 +88,27 @@ public class SlangWord {
     }
 
     public void showHistory() throws IOException {
-        BufferedReader br = new BufferedReader(new FileReader("historyFile.txt"));
-        String str = null;
-        while(true){
-            str = br.readLine();
-            if(str == null){
-                break;
-            }
-            System.out.println(str);
+        DataInputStream dis = null;
+        try {
+            dis = new DataInputStream(new FileInputStream("historyFile.txt"));
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
         }
-        br.close();
+        try {
+            while (true) {
+                try {
+                    String s = dis.readUTF();
+                    System.out.println(s);
+
+                } catch (EOFException e) {
+                    break;
+                }
+            }
+            dis.close();
+        } catch (IOException e) {
+            System.out.println("Error reading file.");
+        }
+
     }
 
     public void save(String filename){

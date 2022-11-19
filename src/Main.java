@@ -1,8 +1,9 @@
 import java.io.IOException;
+import java.util.List;
 import java.util.Scanner;
 
 public class Main {
-    public static Scanner sc = new Scanner(System.in);
+    public static Scanner sc = new Scanner(System.in).useDelimiter("\n");
     public static void main(String[] args) throws IOException {
         SlangWord dict = new SlangWord("slang.txt");
         while(true){
@@ -23,8 +24,46 @@ public class Main {
             }
             if (choice == 1){
                 String key = sc.next();
-                dict.findBySlangWord(key);
+                if(dict.findBySlangWord(key) == false){
+                    System.out.println("Not found");
+                }
             }
+            if(choice == 2){
+                String str = sc.next();
+                if(dict.findByDefinition(str) == false){
+                    System.out.println("Not found");
+                }
+            }
+            if(choice == 3){
+                dict.showHistory();
+            }
+            if (choice == 4){
+                String key = sc.next();
+                List<String> values = null;
+                int nValues = sc.nextInt();
+                for(int i = 0; i < nValues; i++){
+                    String temp = sc.next();
+                    values.add(temp);
+                }
+                dict.addSlangWord(key, values);
+            }
+            if(choice == 5){
+                String key = sc.next();
+                dict.editSlangWord(key);
+            }
+            if(choice == 6){
+                String key = sc.next();
+                dict.deleteSlangWord(key);
+            }
+            if (choice == 7){
+                dict.resetListSlangWord();
+            }
+            if(choice == 8){
+                dict.randomSlangWord();
+            }
+            if(choice == 9){
+            }
+
         }
     }
 }
