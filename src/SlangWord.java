@@ -24,16 +24,12 @@ public class SlangWord {
         String tLine = null;
         while(true){
             line = br1.readLine();
-            tLine = br2.readLine();
-            if(line == null && tLine == null){
+            if(line == null){
                 break;
             }
             String[] info = line.split("`", 2);
-            String[] tInfo = tLine.split("`", 2);
             String key = info[0];
-            String tKey = tInfo[0];
             List<String> values = new ArrayList<>();
-            List<String> tValues = new ArrayList<>();
             if(info.length >= 2) {
                 //Thiếu trường hợp 2 value cách nhau bằng enter(AMA)
                 String[] tempValue = info[1].split("\\| ");
@@ -41,6 +37,17 @@ public class SlangWord {
                     values.add(temp);
                 }
             }
+            dictionaryWords.put(key, values);
+        }
+
+        while(true){
+            tLine = br2.readLine();
+            if(tLine == null){
+                break;
+            }
+            String[] tInfo = tLine.split("`", 2);
+            String tKey = tInfo[0];
+            List<String> tValues = new ArrayList<>();
             if(tInfo.length >= 2) {
                 //Thiếu trường hợp 2 value cách nhau bằng enter(AMA)
                 String[] tempValue1 = tInfo[1].split("\\| ");
@@ -48,7 +55,6 @@ public class SlangWord {
                     tValues.add(temp);
                 }
             }
-            dictionaryWords.put(key, values);
             cloneDict.put(tKey, tValues);
         }
         br1.close();
@@ -222,13 +228,82 @@ public class SlangWord {
         System.out.println("This list slang word is reset");
     }
 
-    public void randomSlangWord(){
+    public String randomSlangWord(){
         double randomDouble = Math.random();
         randomDouble = randomDouble * dictionaryWords.size() + 1;
         int index = (int) randomDouble;
         String[] keys = dictionaryWords.keySet().toArray(new String[0]);
-        System.out.println(keys[index]);
+        //System.out.println(keys[index]);
+        return keys[index];
     }
+    public void quizBySlangWord() {
+        String key, word1, word2, word3;
+        do {
+            key = randomSlangWord();
+            word1 = randomSlangWord();
+            word2 = randomSlangWord();
+            word3 = randomSlangWord();
+        } while (key.equals(word1) || key.equals(word2) || key.equals(word3));
+        String[] answers = {key, word1, word2, word3};
+        Arrays.sort(answers);
 
+        System.out.println("Question: What is mean of " + key + "?");
+        int trueAnswer = 0;
+        for (int i = 0; i < answers.length; i++) {
+            System.out.println((i + 1)+ ". " + dictionaryWords.get(answers[i]));
+            if (answers[i].equals(key)) {
+                trueAnswer = i + 1;
+            }
+        }
+        System.out.print("Your answer: ");
+        int answer;
+        Scanner scanner = new Scanner(System.in);
+        answer = scanner.nextInt();
+        if (answer == trueAnswer) {
+            System.out.println("Right!");
+        }
+        else {
+            System.out.println("Wrong!");
+            System.out.println("The right answer is " + trueAnswer);
+        }
+    }
+    public void quizByDefinition(){
+        String key, word1, word2, word3;
+        do {
+            key = randomSlangWord();
+            word1 = randomSlangWord();
+            word2 = randomSlangWord();
+            word3 = randomSlangWord();
+        } while (key.equals(word1) || key.equals(word2) || key.equals(word3));
+        String[] answers = {key, word1, word2, word3};
+        Arrays.sort(answers);
+        String[] values;
+        values = dictionaryWords.get(key).toString().split("\\|");
+        dictionaryWords.get(key);
+        if(values.length == 1) {
+            System.out.println("Question: What is slang word of " + values[0] + " ?");
+        }
+        if(values.length > 1){
+            System.out.println("Question: What is slang word of " + values[0] + "] ?");
+        }
+        int trueAnswer = 0;
+        for (int i = 0; i < answers.length; i++) {
+            System.out.println((i + 1)+ ". " + answers[i]);
+            if (answers[i].equals(key)) {
+                trueAnswer = i + 1;
+            }
+        }
+        System.out.print("Your answer: ");
+        int answer;
+        Scanner scanner = new Scanner(System.in);
+        answer = scanner.nextInt();
+        if (answer == trueAnswer) {
+            System.out.println("Right!");
+        }
+        else {
+            System.out.println("Wrong!");
+            System.out.println("The right answer is " + trueAnswer);
+        }
+    }
 
 }
