@@ -56,6 +56,7 @@ public class Main {
                 dict.addSlangWord(key, values);
             }
             if(choice == 5){
+                System.out.print("Enter your slang word you want to update: ");
                 String key = sc.next();
                 dict.editSlangWord(key);
             }

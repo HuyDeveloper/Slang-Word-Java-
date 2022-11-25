@@ -179,7 +179,7 @@ public class SlangWord {
         int n;
         List<String> values = new ArrayList<>();
         if(dictionaryWords.containsKey(key)) {
-            System.out.println("Enter number value you want to change: ");
+            System.out.print("Enter number value you want to change: ");
             n = sc.nextInt();
             for(int i = 0; i < n; i++){
                 String str = sc.next();
