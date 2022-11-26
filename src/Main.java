@@ -70,6 +70,7 @@ public class Main {
             if(choice == 8){
                 String randomStr;
                 randomStr = dict.randomSlangWord();
+                System.out.print("Random slang word is: ");
                 System.out.println((randomStr));
             }
             if(choice == 9){
