@@ -74,6 +74,7 @@ public class Main {
                 System.out.println((randomStr));
             }
             if(choice == 9){
+                System.out.println(">>>Start quiz<<<");
                 dict.quizBySlangWord();
             }
             if(choice == 10){
