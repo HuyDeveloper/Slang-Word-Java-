@@ -78,6 +78,7 @@ public class Main {
                 dict.quizBySlangWord();
             }
             if(choice == 10){
+                System.out.println(">>>Start quiz<<<");
                 dict.quizByDefinition();
             }
 

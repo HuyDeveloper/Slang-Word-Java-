@@ -31,7 +31,6 @@ public class SlangWord {
             String key = info[0];
             List<String> values = new ArrayList<>();
             if(info.length >= 2) {
-                //Thiếu trường hợp 2 value cách nhau bằng enter(AMA)
                 String[] tempValue = info[1].split("\\| ");
                 for (String temp : tempValue) {
                     values.add(temp);
@@ -49,7 +48,6 @@ public class SlangWord {
             String tKey = tInfo[0];
             List<String> tValues = new ArrayList<>();
             if(tInfo.length >= 2) {
-                //Thiếu trường hợp 2 value cách nhau bằng enter(AMA)
                 String[] tempValue1 = tInfo[1].split("\\| ");
                 for (String temp : tempValue1) {
                     tValues.add(temp);
@@ -112,7 +110,7 @@ public class SlangWord {
         try {
             dis = new DataInputStream(new FileInputStream("historyFile.txt"));
         } catch (FileNotFoundException e) {
-            e.printStackTrace();
+            System.out.println("Error to open file");
         }
         try {
             while (true) {
