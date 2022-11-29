@@ -170,6 +170,7 @@ public class SlangWord {
         }
         else{
             dictionaryWords.put(key, values);
+            save("slang.txt");
             System.out.println("Slang word is added");
         }
     }

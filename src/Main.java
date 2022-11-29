@@ -20,7 +20,8 @@ public class Main {
             System.out.println("9. Funny question(choose right definition)");
             System.out.println("10. Funny question(choose right slang word)");
             System.out.print("Enter your choice: ");
-            int choice = sc.nextInt();
+            Scanner scan = new Scanner(System.in);
+            int choice = scan.nextInt();
             if(choice == 0){
                 break;
             }
